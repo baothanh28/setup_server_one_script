@@ -1,0 +1,17 @@
+Bước 1: Truy cập cấu hình Nginx
+Mở trình duyệt và đăng nhập vào Nginx UI.
+
+Tìm đến mục Nginx (thường nằm ở menu bên trái hoặc trong phần Dashboard).
+
+Chọn tab Config (hoặc biểu tượng chỉnh sửa file cấu hình chính nginx.conf).
+
+Bước 2: Thêm đoạn mã stub_status
+Trong cửa sổ chỉnh sửa cấu hình, bạn tìm đến khối http { ... } và bên trong đó là khối server { ... } (thường là khối server mặc định đang lắng nghe cổng 80).
+Thêm đoạn mã sau vào trong khối server:
+
+
+location /nginx_status {
+    stub_status on;
+    access_log off;
+    allow 127.0.0.1;
+}
