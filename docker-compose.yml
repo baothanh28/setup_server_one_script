@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  nginx-ui:
+    image: uozi/nginx-ui:latest
+    container_name: nginx-ui
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Dòng quan trọng nhất
+      - /etc/nginx:/etc/nginx               # Chia sẻ cấu hình Nginx thực tế
+      - /var/www:/var/www                   # Chia sẻ mã nguồn web
+      - /etc/ssl:/etc/ssl                   # Chia sẻ chứng chỉ SSL
+      - ./nginx-ui/data:/etc/nginx-ui       # Lưu trữ database của giao diện
+      - /var/run/nginx.pid:/var/run/nginx.pid
+    ports:
+      - "9000:9000"
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+
