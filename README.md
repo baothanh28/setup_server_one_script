@@ -160,6 +160,9 @@ sudo ls -la /opt/nginxui
 
 ## Hỗ trợ
 
+
+sed -i 's/\r$//' install.sh
+
 Nếu gặp vấn đề, kiểm tra:
 1. Logs của từng service
 2. File cấu hình .env
