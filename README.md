@@ -70,9 +70,8 @@ Tương tự, bạn có thể SSH tunnel để truy cập trực tiếp vào Pos
 # Giả sử PostgreSQL listen trên 127.0.0.1:5432 (mặc định trong script cài đặt)
 ssh -L 5432:127.0.0.1:5432 user@your_server_ip
 ```
-Sau đó, bạn có thể dùng các tool như DBeaver, TablePlus, psql… để kết nối PostgreSQL với host = localhost, port = 5432 (chính là qua tunnel).
+Sau đó, bạn có thể dùng các tool như DBeaver, TablePlus, psql… để kết nối PostgreSQL với host = localhost, port = 5432 (chính là qua tunnel). Cách khác: dùng [Nginx reverse proxy cho database](NGINX_DATABASE_REVERSE_PROXY.md) để expose PostgreSQL qua một port (ví dụ 5433) với giới hạn IP và tùy chọn SSL.
 
-```
 Sau đó truy cập: `http://localhost:9000`
 
 ### Cách 2: Truy cập trực tiếp trên server
@@ -169,5 +168,7 @@ Nếu gặp vấn đề, kiểm tra:
 3. Quyền truy cập file/directory
 4. Kết nối internet
 
-Setup nginx-ui reverse database stream
-Setup nginx-ui
+## Tài liệu bổ sung
+
+- **[Hướng dẫn Setup Reverse Proxy cho Database (Nginx)](NGINX_DATABASE_REVERSE_PROXY.md)** – Cấu hình Nginx stream proxy cho PostgreSQL/MySQL/Redis, giới hạn IP, SSL và troubleshooting.
+- **[Hướng dẫn Setup Cloudflare với Server](CLOUDFLARE_SETUP.md)** – DNS, proxy, SSL/TLS và Nginx với Cloudflare.

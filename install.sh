@@ -123,13 +123,28 @@ install_postgresql() {
 }
 
 # ============================================
-# Install Nginx
+# Install Nginx (mainline)
 # ============================================
 install_nginx() {
-    log_info "Installing Nginx..."
+    log_info "Installing Nginx (mainline)..."
     if [ "$OS" = "ubuntu" ] || [ "$OS" = "debian" ]; then
+        apt-get install -y curl gnupg2 ca-certificates lsb-release debian-archive-keyring apt-transport-https
+        curl -fsSL https://nginx.org/keys/nginx_signing.key | gpg --dearmor -o /usr/share/keyrings/nginx-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/mainline/${OS} $(lsb_release -cs) nginx" | tee /etc/apt/sources.list.d/nginx.list > /dev/null
+        apt-get update -y
         apt-get install -y nginx
     else
+        RELEASEVER=$(rpm -E %{rhel} 2>/dev/null || echo "8")
+        RHEL_OR_CENTOS="centos"
+        [ "$OS" = "rhel" ] && RHEL_OR_CENTOS="rhel"
+        cat > /etc/yum.repos.d/nginx-mainline.repo << REPO
+[nginx-mainline]
+name=nginx mainline repo
+baseurl=http://nginx.org/packages/mainline/${RHEL_OR_CENTOS}/${RELEASEVER}/\$basearch/
+gpgcheck=1
+enabled=1
+gpgkey=https://nginx.org/keys/nginx_signing.key
+REPO
         yum install -y nginx
     fi
     systemctl enable nginx
@@ -214,6 +229,17 @@ install_nginxui() {
 }
 
 # ============================================
+# Setup UFW Firewall
+# ============================================
+setup_ufw_firewall() {
+    log_info "Enabling UFW firewall..."
+    sudo ufw --force enable || true
+    sudo ufw allow 22/tcp
+    sudo ufw allow 80/tcp
+    sudo ufw allow 443/tcp
+}
+
+# ============================================
 # Main Execution Flow
 # ============================================
 main() {
@@ -224,6 +250,8 @@ main() {
     [ "$INSTALL_NGINX" != "false" ] && install_nginx
     [ "$INSTALL_DOCKER" != "false" ] && install_docker
     [ "$INSTALL_NGINXUI" != "false" ] && install_nginxui
+
+    [ "$SETUP_UFW_FIREWALL" != "false" ] && setup_ufw_firewall
 
     log_info "--------------------------------------------"
     log_info "All tasks finished successfully!"

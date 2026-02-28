@@ -12,6 +12,8 @@ services:
       - /etc/ssl:/etc/ssl                   # Chia sẻ chứng chỉ SSL
       - ./nginx-ui/data:/etc/nginx-ui       # Lưu trữ database của giao diện
       - /var/run/nginx.pid:/var/run/nginx.pid
+      - /usr/lib/nginx/modules:/usr/lib/nginx/modules:ro
+      - /usr/share/nginx/modules-helper:/usr/share/nginx/modules-helper:ro
     ports:
       - "9000:9000"
     environment:
