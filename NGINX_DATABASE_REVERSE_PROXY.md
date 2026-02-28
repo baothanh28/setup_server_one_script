@@ -366,3 +366,6 @@ listen 5433;
 proxy_pass database_backend;
 proxy_connect_timeout 1s;
 proxy_timeout 10m; 
+
+nc -zv your_server_ip 15432
+nc -zv 127.0.0.1 15432
