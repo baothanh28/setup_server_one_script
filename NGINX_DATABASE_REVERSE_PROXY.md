@@ -369,3 +369,16 @@ proxy_timeout 10m;
 
 nc -zv your_server_ip 15432
 nc -zv 127.0.0.1 15432
+
+setup xong stream phải restart nginx mới hoạt động ??
+systemctl restart nginx
+
+server {
+    listen 1986;
+    proxy_pass 127.0.0.1:5432;
+    proxy_connect_timeout 5s;
+    proxy_timeout 60s;
+}
+nginx -T | grep -n 1986
+ss -lntp | grep 1986
+nc -zv 127.0.0.1 1986
