@@ -306,10 +306,27 @@ Chế độ Flexible: Cloudflare mã hóa từ trình duyệt đến Cloudflare,
    -  Ví dụ hoàn chỉnh sẽ thành:
    -  Save → Reload Nginx
 
+
 default_type text/plain;
 return 200 "health ok";
 
+server {
+    listen 80;
+    listen [::]:80;
 
+    server_name luckystack.dev *.luckystack.dev;
+
+    location /health {
+        default_type text/plain;
+        return 200 "health ok";
+    }
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
 4. **Kiểm tra cấu hình:**
    - Vào tab **Test Config** hoặc dùng lệnh (nếu thao tác ngoài UI):  
      `nginx -t`
