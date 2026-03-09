@@ -28,6 +28,7 @@ Mở file `.env` và cấu hình các thông số theo nhu cầu:
 ### 3. Chạy script cài đặt
 
 ```bash
+sed -i 's/\r$//' install.sh
 chmod +x install.sh
 sudo ./install.sh
 ```
